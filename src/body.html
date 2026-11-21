@@ -1,0 +1,507 @@
+  <a class="skip-link" href="#main">Lewati ke konten utama</a>
+
+  <!-- Penyamaran layar (hanya aktif saat panel admin terbuka & jendela tidak aktif) -->
+  <div id="privacyOverlay" class="privacy-overlay" hidden>
+    <i class="fa-solid fa-eye-slash"></i>
+    <strong>Konten disembunyikan</strong>
+    <span>Layar disamarkan karena jendela sedang tidak aktif.</span>
+  </div>
+
+  <!-- ================= HEADER + RUNNING TEXT (sticky bersama) ================= -->
+  <div class="topbar" id="topbar">
+    <header class="header">
+      <div class="container header__inner">
+        <!-- Logo: ketuk 1x = ke atas. Ketuk 5x cepat = buka panel admin (tersembunyi). -->
+        <button class="brand" id="brandLogo" type="button" aria-label="Kembali ke atas">
+          <img class="brand__logo" id="brandLogoImg" src="https://drive.google.com/thumbnail?id=1idLtJc02P8ShtAAD5yDRe2mB6yjRO5hU&sz=w200" alt="" width="44" height="44" draggable="false">
+          <span class="brand__text">
+            <span class="brand__name" id="navNamaUsaha">BeeCOMP Service</span>
+            <span class="brand__tag" id="navTagline">Antri servis online</span>
+          </span>
+        </button>
+
+        <nav class="nav-desktop" aria-label="Menu utama">
+          <button type="button" data-open="antri">Ambil Antrian</button>
+          <button type="button" data-open="status">Cek Progres</button>
+          <button type="button" data-open="tanya">Konsultasi</button>
+          <button type="button" data-open="anggota">Anggota</button>
+        </nav>
+
+        <button class="icon-btn icon-btn--header" id="btnTheme" type="button" aria-label="Ganti mode gelap/terang" title="Mode gelap/terang">
+          <i class="fa-solid fa-moon" id="iconTheme"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Isi diambil dari sheet Pengaturan (key: InfoPromo) -->
+    <div class="marquee" id="marquee" hidden>
+      <div class="marquee__track">
+        <span class="marquee__item" id="marquee1"></span>
+        <span class="marquee__item" id="marquee2" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <span class="chip chip--live"><span class="live-dot"></span> Antrian online dibuka</span>
+          <h1 class="hero__title">Servis perangkat,<br><span class="hl">tanpa antre lama.</span></h1>
+          <p class="hero__lead">Ambil nomor antrian dari mana saja, pantau progres pengerjaan dengan kode akses rahasia, dan konsultasi langsung dengan teknisi kami.</p>
+          <div class="hero__cta">
+            <button class="btn btn--accent btn--lg" type="button" data-open="antri"><i class="fa-solid fa-ticket"></i> Ambil Tiket Antrian</button>
+            <button class="btn btn--glass btn--lg" type="button" data-open="status"><i class="fa-solid fa-magnifying-glass"></i> Cek Progres</button>
+          </div>
+          <p class="hero__meta" id="jamWrap" hidden><i class="fa-regular fa-clock"></i> <span id="jamOperasionalLabel"></span></p>
+        </div>
+
+        <div class="hero__panel" aria-label="Ringkasan antrian hari ini">
+          <div class="stat-card">
+            <div class="stat-card__head">
+              <span>Antrian hari ini</span>
+              <span class="stat-card__time" id="papanUpdated">memuat…</span>
+            </div>
+            <div class="stat-card__big" id="statTotal">–</div>
+            <div class="stat-card__grid">
+              <div><span class="stat-card__num" id="statMenunggu">–</span><span class="stat-card__lbl">Menunggu</span></div>
+              <div><span class="stat-card__num" id="statProses">–</span><span class="stat-card__lbl">Diproses</span></div>
+              <div><span class="stat-card__num" id="statSelesai">–</span><span class="stat-card__lbl">Selesai</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= AKSI CEPAT ================= -->
+    <section class="section section--overlap" aria-label="Menu cepat">
+      <div class="container">
+        <div class="quick-grid">
+          <button class="quick-card" type="button" data-open="antri">
+            <span class="quick-card__icon qi-accent"><i class="fa-solid fa-ticket"></i></span>
+            <span class="quick-card__title">Ambil Antrian</span>
+            <span class="quick-card__desc">Isi form singkat, nomor langsung terbit</span>
+          </button>
+          <button class="quick-card" type="button" data-open="status">
+            <span class="quick-card__icon qi-primary"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <span class="quick-card__title">Cek Progres</span>
+            <span class="quick-card__desc">Pakai kode akses dari email</span>
+          </button>
+          <button class="quick-card" type="button" data-open="tanya">
+            <span class="quick-card__icon qi-green"><i class="fa-solid fa-comments"></i></span>
+            <span class="quick-card__title">Konsultasi</span>
+            <span class="quick-card__desc">Tanya teknisi soal servis Anda</span>
+          </button>
+          <button class="quick-card" type="button" data-open="anggota">
+            <span class="quick-card__icon qi-gold"><i class="fa-solid fa-crown"></i></span>
+            <span class="quick-card__title">Jadi Anggota</span>
+            <span class="quick-card__desc">Gratis, banyak keuntungannya</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAPAN ANTRIAN ================= -->
+    <section class="section" id="papan">
+      <div class="container">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title"><i class="fa-solid fa-list-ol"></i> Papan Antrian Hari Ini</h2>
+              <p class="section-sub">Diperbarui otomatis setiap 30 detik. Tanpa data pribadi.</p>
+            </div>
+            <button class="btn btn--soft btn--sm" type="button" id="btnRefreshPapan"><i class="fa-solid fa-rotate"></i> <span>Muat ulang</span></button>
+          </div>
+          <div class="papan-grid" id="papanWrap">
+            <div class="skeleton-tile"></div><div class="skeleton-tile"></div><div class="skeleton-tile"></div><div class="skeleton-tile"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CARA KERJA ================= -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title section-title--center">Semudah 3 langkah</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step__num">1</span>
+            <h3>Daftar Antrian</h3>
+            <p>Isi data diri, jenis perangkat & keluhan. Nomor antrian + <strong>kode akses rahasia</strong> dikirim ke email Anda.</p>
+          </div>
+          <div class="step">
+            <span class="step__num">2</span>
+            <h3>Pantau & Konsultasi</h3>
+            <p>Diperiksa &rarr; Dikerjakan &rarr; Selesai. Cek progres & tanya teknisi kapan saja hanya dengan kode akses.</p>
+          </div>
+          <div class="step">
+            <span class="step__num">3</span>
+            <h3>Bayar & Ambil</h3>
+            <p>Instruksi pembayaran QRIS dikirim otomatis. Setelah lunas, kuitansi bisa langsung diunduh.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ANGGOTA ================= -->
+    <section class="section" id="anggota">
+      <div class="container">
+        <div class="member-banner">
+          <div class="member-banner__copy">
+            <span class="chip chip--gold"><i class="fa-solid fa-crown"></i> Member BeeCOMP</span>
+            <h2>Jadi anggota, servis lebih untung.</h2>
+            <p id="anggotaDeskripsiBanner">Program keanggotaan gratis untuk pelanggan setia.</p>
+            <button class="btn btn--accent" type="button" data-open="anggota"><i class="fa-solid fa-id-card"></i> Daftar sebagai Anggota</button>
+          </div>
+          <ul class="benefit-list" id="anggotaManfaatBanner"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LOKASI ================= -->
+    <section class="section" id="lokasi">
+      <div class="container">
+        <div class="card">
+          <h2 class="section-title"><i class="fa-solid fa-location-dot"></i> Lokasi Kami</h2>
+          <p class="section-sub" id="alamatLokasi"></p>
+          <div class="map-wrap">
+            <iframe src="https://www.google.com/maps?q=-7.830219,111.9899131&z=17&output=embed" width="100%" height="320" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Peta lokasi BeeCOMP Service"></iframe>
+          </div>
+          <div class="map-actions">
+            <a class="btn btn--primary" href="https://maps.app.goo.gl/fuJr3dXLkSsC21tq5" target="_blank" rel="noopener"><i class="fa-solid fa-map-location-dot"></i> Buka di Google Maps</a>
+            <a class="btn btn--accent" href="https://www.google.com/maps/dir/?api=1&destination=-7.830219,111.9899131" target="_blank" rel="noopener"><i class="fa-solid fa-route"></i> Rute ke Lokasi</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer info usaha (desktop: menempel di bawah layar) -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__name" id="footerNamaUsaha">BeeCOMP Service</p>
+      <p class="footer__addr" id="footerAlamat">&nbsp;</p>
+    </div>
+  </footer>
+
+  <!-- Navigasi bawah (khusus layar kecil) -->
+  <nav class="bottom-nav" aria-label="Navigasi bawah">
+    <button type="button" data-nav="home" class="is-active"><i class="fa-solid fa-house"></i><span>Beranda</span></button>
+    <button type="button" data-open="status"><i class="fa-solid fa-magnifying-glass"></i><span>Progres</span></button>
+    <button type="button" data-open="antri" class="bottom-nav__main" aria-label="Ambil antrian"><i class="fa-solid fa-ticket"></i><span>Antri</span></button>
+    <button type="button" data-open="tanya"><i class="fa-solid fa-comments"></i><span>Tanya</span></button>
+    <button type="button" data-open="anggota"><i class="fa-solid fa-crown"></i><span>Anggota</span></button>
+  </nav>
+
+  <!-- Helpdesk WhatsApp (nomor dari sheet Pengaturan: NoWhatsAppAdmin) -->
+  <button type="button" class="fab-wa" id="btnHelpdesk" title="Butuh bantuan? Chat Admin via WhatsApp" aria-label="Helpdesk WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i><span>Helpdesk</span>
+  </button>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- ================= MODAL: AMBIL ANTRIAN ================= -->
+  <div class="modal" id="mAntri" role="dialog" aria-modal="true" aria-labelledby="mAntriT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog">
+      <div class="modal__head">
+        <div><h2 id="mAntriT"><i class="fa-solid fa-ticket"></i> Ambil Tiket Antrian</h2><p>Kode akses rahasia akan dikirim ke email Anda.</p></div>
+        <button class="icon-btn" type="button" data-close aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form class="modal__body" id="formAntri" novalidate>
+        <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field">
+          <label for="fNama">Nama Lengkap <span class="req">*</span></label>
+          <input id="fNama" name="nama" type="text" required maxlength="80" autocomplete="name" placeholder="Nama lengkap Anda">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="fWA">No. WhatsApp <span class="req">*</span></label>
+            <input id="fWA" name="wa" type="tel" required inputmode="tel" maxlength="20" autocomplete="tel" placeholder="08xxxxxxxxxx">
+          </div>
+          <div class="field">
+            <label for="fEmail">Email <span class="req">*</span></label>
+            <input id="fEmail" name="email" type="email" required maxlength="120" autocomplete="email" inputmode="email" placeholder="nama@gmail.com">
+          </div>
+        </div>
+        <div class="field">
+          <label>Kategori Perangkat <span class="req">*</span></label>
+          <div class="seg" role="radiogroup" id="segKategori">
+            <label><input type="radio" name="kategori" value="Laptop" required><span><i class="fa-solid fa-laptop"></i>Laptop</span></label>
+            <label><input type="radio" name="kategori" value="PC / Komputer"><span><i class="fa-solid fa-desktop"></i>PC</span></label>
+            <label><input type="radio" name="kategori" value="HP / Tablet"><span><i class="fa-solid fa-mobile-screen"></i>HP/Tablet</span></label>
+            <label><input type="radio" name="kategori" value="Printer"><span><i class="fa-solid fa-print"></i>Printer</span></label>
+            <label><input type="radio" name="kategori" value="Lainnya"><span><i class="fa-solid fa-plug"></i>Lainnya</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="fTipe">Tipe / Merk <span class="req">*</span></label>
+          <input id="fTipe" name="tipe" type="text" required maxlength="80" placeholder="Contoh: HP Pavilion x360 14-dy">
+        </div>
+        <div class="field">
+          <label for="fKeluhan">Keluhan <span class="req">*</span></label>
+          <textarea id="fKeluhan" name="keluhan" rows="3" required maxlength="1000" placeholder="Jelaskan keluhan/kerusakan perangkat Anda"></textarea>
+        </div>
+        <div class="field">
+          <label for="fVoucher">Kode Voucher <span class="opt">(opsional)</span></label>
+          <input id="fVoucher" name="kodeVoucher" type="text" maxlength="30" autocapitalize="characters" placeholder="Contoh: HEMAT10">
+          <small class="hint">Potongan diterapkan setelah admin memvalidasi kode.</small>
+        </div>
+        <div class="modal__foot">
+          <button type="button" class="btn btn--soft" data-close>Batal</button>
+          <button type="submit" class="btn btn--accent" id="btnSubmitAntri">Daftar Antrian <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CEK PROGRES ================= -->
+  <div class="modal" id="mStatus" role="dialog" aria-modal="true" aria-labelledby="mStatusT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog modal__dialog--lg">
+      <div class="modal__head">
+        <div><h2 id="mStatusT"><i class="fa-solid fa-magnifying-glass"></i> Cek Progres Servis</h2><p>Masukkan kode akses 10 karakter dari email konfirmasi.</p></div>
+        <button class="icon-btn" type="button" data-close aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal__body">
+        <form class="code-form" id="formStatus" novalidate>
+          <label class="sr-only" for="inKodeStatus">Kode akses</label>
+          <input id="inKodeStatus" class="code-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="11" placeholder="XXXXX-XXXXX" inputmode="text">
+          <button class="btn btn--accent" type="submit" id="btnCekStatus"><i class="fa-solid fa-magnifying-glass"></i><span>Cek</span></button>
+        </form>
+        <p class="hint hint--center"><i class="fa-solid fa-shield-halved"></i> Demi privasi, progres hanya bisa dilihat dengan kode akses. Tidak menerima email? Hubungi Helpdesk.</p>
+        <div id="hasilStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: KONSULTASI ================= -->
+  <div class="modal" id="mTanya" role="dialog" aria-modal="true" aria-labelledby="mTanyaT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog modal__dialog--chat">
+      <div class="modal__head">
+        <div><h2 id="mTanyaT"><i class="fa-solid fa-comments"></i> Konsultasi Teknisi</h2><p id="tanyaSub">Hanya Anda (pemilik kode akses) yang bisa membaca percakapan ini.</p></div>
+        <button class="icon-btn" type="button" data-close aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal__body" id="tanyaStepKode">
+        <form class="code-form" id="formTanyaKode" novalidate>
+          <label class="sr-only" for="inKodeTanya">Kode akses</label>
+          <input id="inKodeTanya" class="code-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="11" placeholder="XXXXX-XXXXX">
+          <button class="btn btn--accent" type="submit" id="btnBukaTanya"><i class="fa-solid fa-lock-open"></i><span>Buka</span></button>
+        </form>
+        <p class="hint hint--center">Masukkan kode akses antrian Anda (dikirim via email saat mendaftar).</p>
+      </div>
+      <div class="chat" id="tanyaStepChat" hidden>
+        <div class="chat__info" id="tanyaInfo"></div>
+        <div class="chat__list" id="tanyaList" aria-live="polite"></div>
+        <form class="chat__form" id="formTanyaPesan">
+          <textarea id="inPesanTanya" rows="1" maxlength="1000" placeholder="Tulis pertanyaan Anda…" aria-label="Tulis pesan"></textarea>
+          <button class="btn btn--accent btn--icon" type="submit" id="btnKirimTanya" aria-label="Kirim"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ANGGOTA ================= -->
+  <div class="modal" id="mAnggota" role="dialog" aria-modal="true" aria-labelledby="mAnggotaT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog modal__dialog--lg">
+      <div class="modal__head">
+        <div><h2 id="mAnggotaT"><i class="fa-solid fa-crown"></i> Daftar sebagai Anggota</h2><p>Gratis &middot; aktif setelah verifikasi admin</p></div>
+        <button class="icon-btn" type="button" data-close aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="member-info">
+          <p class="member-info__desc" id="anggotaDeskripsi"></p>
+          <div class="member-info__cols">
+            <div>
+              <h3><i class="fa-solid fa-gift"></i> Manfaat</h3>
+              <ul class="benefit-list benefit-list--plain" id="anggotaManfaat"></ul>
+            </div>
+            <div>
+              <h3><i class="fa-solid fa-file-contract"></i> Syarat &amp; Ketentuan</h3>
+              <ol class="terms-list" id="anggotaKetentuan"></ol>
+            </div>
+          </div>
+        </div>
+        <form id="formAnggota" novalidate>
+          <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="field">
+            <label for="aNama">Nama Lengkap <span class="req">*</span></label>
+            <input id="aNama" name="nama" type="text" required maxlength="80" autocomplete="name" placeholder="Sesuai identitas">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="aWA">No. WhatsApp <span class="req">*</span></label>
+              <input id="aWA" name="wa" type="tel" required inputmode="tel" maxlength="20" autocomplete="tel" placeholder="08xxxxxxxxxx">
+            </div>
+            <div class="field">
+              <label for="aEmail">Email <span class="req">*</span></label>
+              <input id="aEmail" name="email" type="email" required maxlength="120" autocomplete="email" placeholder="nama@gmail.com">
+            </div>
+          </div>
+          <div class="field">
+            <label for="aAlamat">Alamat / Kota <span class="opt">(opsional)</span></label>
+            <input id="aAlamat" name="alamat" type="text" maxlength="200" autocomplete="address-level2" placeholder="Contoh: Kediri">
+          </div>
+          <label class="check">
+            <input type="checkbox" id="aSetuju" required>
+            <span>Saya telah membaca dan menyetujui syarat &amp; ketentuan anggota.</span>
+          </label>
+          <div class="modal__foot">
+            <button type="button" class="btn btn--soft" data-close>Batal</button>
+            <button type="submit" class="btn btn--accent" id="btnSubmitAnggota"><i class="fa-solid fa-id-card"></i> Daftar Anggota</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ADMIN (tersembunyi, buka dengan ketuk logo 5x) ================= -->
+  <div class="modal modal--full" id="mAdmin" role="dialog" aria-modal="true" aria-labelledby="mAdminT" hidden>
+    <div class="modal__backdrop"></div>
+    <div class="modal__dialog">
+      <div class="modal__head modal__head--brand">
+        <div><h2 id="mAdminT"><i class="fa-solid fa-user-shield"></i> Ruang Administrasi</h2><p id="adminWelcome">Silakan login</p></div>
+        <div class="head-actions">
+          <button class="btn btn--glass btn--sm" type="button" id="btnAdminReload" hidden><i class="fa-solid fa-rotate"></i><span class="hide-xs">Muat ulang</span></button>
+          <button class="btn btn--glass btn--sm" type="button" id="btnAdminLogout" hidden><i class="fa-solid fa-right-from-bracket"></i><span class="hide-xs">Keluar</span></button>
+          <button class="icon-btn icon-btn--light" type="button" data-close aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <div class="modal__body admin-body">
+        <!-- Login -->
+        <div id="adminLogin" class="admin-login">
+          <div class="admin-login__icon"><i class="fa-solid fa-user-shield"></i></div>
+          <h3>Login Admin</h3>
+          <form id="formLogin" novalidate>
+            <div class="field">
+              <label for="adminUser">Username</label>
+              <input id="adminUser" type="text" required autocomplete="username" autocapitalize="off">
+            </div>
+            <div class="field">
+              <label for="adminPass">Password</label>
+              <div class="pass-wrap">
+                <input id="adminPass" type="password" required autocomplete="current-password">
+                <button type="button" class="pass-toggle" id="btnTogglePass" aria-label="Tampilkan password"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn--accent btn--block" id="btnLogin">Masuk</button>
+          </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="adminDash" class="admin-dash" hidden>
+          <div class="watermark" id="adminWatermark" aria-hidden="true"></div>
+
+          <div class="tabs" role="tablist">
+            <button type="button" role="tab" class="tab is-active" data-tab="antrian"><i class="fa-solid fa-list-check"></i> Antrian</button>
+            <button type="button" role="tab" class="tab" data-tab="konsultasi"><i class="fa-solid fa-comments"></i> Konsultasi <span class="tab-badge" id="badgeKonsultasi" hidden>0</span></button>
+            <button type="button" role="tab" class="tab" data-tab="anggota"><i class="fa-solid fa-users"></i> Anggota <span class="tab-badge" id="badgeAnggota" hidden>0</span></button>
+          </div>
+
+          <!-- Tab Antrian -->
+          <div class="tab-panel" data-panel="antrian">
+            <div class="stat-chips" id="adminStats"></div>
+            <div class="admin-filters">
+              <select id="filterStatus" aria-label="Filter status">
+                <option value="">Semua Status</option>
+                <option value="aktif">Aktif (belum tuntas)</option>
+                <option>Menunggu</option><option>Diperiksa</option><option>Dikerjakan</option>
+                <option>Selesai</option><option>Diambil</option><option>Dibatalkan</option>
+                <option value="bayar">Menunggu Pembayaran</option>
+                <option value="voucher">Voucher perlu validasi</option>
+              </select>
+              <input id="filterKeyword" type="search" placeholder="Cari nama / no antrian / tipe / ID / kode…" aria-label="Cari">
+            </div>
+            <div class="adm-list" id="admList"><div class="state-msg">Memuat data…</div></div>
+          </div>
+
+          <!-- Tab Konsultasi -->
+          <div class="tab-panel" data-panel="konsultasi" hidden>
+            <div class="adm-threads" id="admThreads"></div>
+          </div>
+
+          <!-- Tab Anggota -->
+          <div class="tab-panel" data-panel="anggota" hidden>
+            <div class="admin-filters">
+              <select id="filterAnggota" aria-label="Filter anggota">
+                <option value="">Semua</option><option>Menunggu Verifikasi</option><option>Aktif</option><option>Nonaktif</option>
+              </select>
+              <input id="filterAnggotaKw" type="search" placeholder="Cari nama / email / WA / ID…" aria-label="Cari anggota">
+            </div>
+            <div class="adm-members" id="admMembers"><div class="state-msg">Memuat data…</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CHAT ADMIN ================= -->
+  <div class="modal" id="mAdminChat" role="dialog" aria-modal="true" aria-labelledby="mAdminChatT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog modal__dialog--chat">
+      <div class="modal__head">
+        <div><h2 id="mAdminChatT"><i class="fa-solid fa-comments"></i> Konsultasi</h2><p id="adminChatSub"></p></div>
+        <button class="icon-btn" type="button" data-close aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="chat">
+        <div class="chat__list" id="adminChatList"></div>
+        <form class="chat__form" id="formAdminChat">
+          <textarea id="inPesanAdmin" rows="1" maxlength="1500" placeholder="Tulis balasan…" aria-label="Tulis balasan"></textarea>
+          <button class="btn btn--primary btn--icon" type="submit" id="btnKirimAdmin" aria-label="Kirim"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: KUITANSI ================= -->
+  <div class="modal" id="mKuitansi" role="dialog" aria-modal="true" aria-labelledby="mKuitansiT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog modal__dialog--lg">
+      <div class="modal__head no-print">
+        <div><h2 id="mKuitansiT"><i class="fa-solid fa-receipt"></i> Kuitansi / Bukti Bayar</h2></div>
+        <button class="icon-btn" type="button" data-close aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal__body">
+        <div id="kuitansiStyle"></div>
+        <div id="kuitansiBody"></div>
+        <div class="modal__foot modal__foot--center no-print">
+          <button class="btn btn--primary" type="button" id="btnCetak"><i class="fa-solid fa-print"></i> Cetak / Simpan PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: INFO ================= -->
+  <div class="modal modal--sm" id="mInfo" role="alertdialog" aria-modal="true" aria-labelledby="mInfoT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog">
+      <div class="modal__body info-body">
+        <div class="info-icon" id="mInfoIcon"><i class="fa-solid fa-circle-check"></i></div>
+        <h2 id="mInfoT">Judul</h2>
+        <div id="mInfoMsg" class="info-msg"></div>
+        <div class="modal__foot modal__foot--center" id="mInfoFoot">
+          <button class="btn btn--accent" type="button" data-close>Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: KONFIRMASI ================= -->
+  <div class="modal modal--sm" id="mConfirm" role="alertdialog" aria-modal="true" aria-labelledby="mConfirmT" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__dialog">
+      <div class="modal__body">
+        <h2 class="confirm-title" id="mConfirmT">Konfirmasi</h2>
+        <div class="confirm-msg" id="mConfirmMsg"></div>
+        <div class="modal__foot">
+          <button class="btn btn--soft" type="button" data-close>Batal</button>
+          <button class="btn btn--accent" type="button" id="btnConfirmOk">Ya, Lanjutkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
